@@ -11,43 +11,33 @@ export class App extends React.Component {
   };
 
   onDelete = id => {
-    const contacts = [...this.state.contacts];
-    const personToFind = id;
-    const newContacts = contacts.filter(({ id }) => id !== personToFind);
-    this.setState({
-      contacts: newContacts,
-    });
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id)
+    }));
   };
 
   submitCathcer = ({ name, number }) => {
-    const contacts = [...this.state.contacts];
-    const nameToAdd = name;
     const person = {
       name: `${name}`,
       id: `${nanoid()}`,
       number: `${number}`,
     };
-
-    const addCheck = contacts.find(({ name }) => name.includes(nameToAdd));
-    if (!addCheck) {
-      contacts.push(person);
-      this.setState({
-        contacts: contacts,
-      });
-    } else {
-      alert(`${nameToAdd} is already in contacts`);
-    }
+    this.setState(prevState => ({
+      contacts: prevState.contacts.find(contact => contact.name === name)
+      ? alert(`${name} is already in contacts`) : [person, ...prevState.contacts]
+    })
+    )
   };
 
   filteredNames() {
-    const contacts = [...this.state.contacts];
+    // const contacts = [...this.state.contacts];
     const filter = this.state.filter;
-    const filtered = contacts.filter(({ name }) =>
+    const filtered = this.state.contacts.filter(({ name }) =>
       name.toLowerCase().includes(filter.toLowerCase())
     );
     return filtered;
   }
-  
+
   onFilter = e => {
     const nameIs = e.target.value;
     this.setState({ filter: nameIs });
