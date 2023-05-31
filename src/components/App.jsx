@@ -22,14 +22,17 @@ export class App extends React.Component {
       id: `${nanoid()}`,
       number: `${number}`,
     };
-    this.setState(prevState => ({
-      contacts: prevState.contacts.find(contact => contact.name === name)
-      ? alert(`${name} is already in contacts`) : [person, ...prevState.contacts]
-    })
-    )
-  };
+    const isExist = this.state.contacts.find(contact => contact.name === name);
+    if(isExist) {
+      alert(`${name} is already in contacts`)
+    } else {
+      this.setState(prevState => ({
+        contacts: [person, ...prevState.contacts]
+      }));
+    }
+  }
 
-  filteredNames() {
+  filteredNames = () => {
     // const contacts = [...this.state.contacts];
     const filter = this.state.filter;
     const filtered = this.state.contacts.filter(({ name }) =>
@@ -55,4 +58,5 @@ export class App extends React.Component {
     );
   }
 }
+
 export default App;
